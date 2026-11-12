@@ -1,0 +1,1539 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1f4d">
+<title>مكتبة مدرستنا</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b1f4d'/><path d='M12 16h16a5 5 0 0 1 4 2 5 5 0 0 1 4-2h16v30H36a4 4 0 0 0-4 3 4 4 0 0 0-4-3H12z' fill='none' stroke='%23e2b93b' stroke-width='3.5' stroke-linejoin='round'/><path d='M32 18v31' stroke='%23e2b93b' stroke-width='3.5'/></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">
+<style>
+/* ===== Tokens ===== */
+:root {
+  --navy-900: #071538;
+  --navy-800: #0b1f4d;
+  --navy-700: #14306e;
+  --navy-100: #e7ecf7;
+  --gold: #c9a227;
+  --gold-light: #e2b93b;
+  --gold-soft: #fbf4dc;
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --text: #14213d;
+  --muted: #5b6784;
+  --line: #e1e6f0;
+  --ok: #17794a;
+  --warn: #a15c00;
+  --bad: #b3261e;
+  --radius: 24px;
+  --shadow: 0 10px 30px rgba(11, 31, 77, .09), 0 2px 6px rgba(11, 31, 77, .05);
+  --shadow-lg: 0 18px 44px rgba(11, 31, 77, .18), 0 4px 10px rgba(11, 31, 77, .08);
+  --gap: clamp(14px, 3.5vw, 28px);
+  --font: 'Cairo', 'Tajawal', 'Segoe UI', Tahoma, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 2px; }
+.skip { position: absolute; inset-inline-start: -999px; top: 8px; background: var(--gold); color: #000; padding: 8px 14px; border-radius: 8px; z-index: 100; }
+.skip:focus { inset-inline-start: 8px; }
+.noscript { padding: 16px; text-align: center; background: var(--gold-soft); }
+
+/* ===== Top bar ===== */
+.topbar {
+  background: var(--navy-900);
+  padding: 10px clamp(16px, 4vw, 32px);
+  border-bottom: 3px solid var(--gold);
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: #fff; text-decoration: none; font-weight: 700; font-size: 1.1rem;
+}
+.brand-mark { font-size: 1.4rem; }
+
+main { flex: 1; width: 100%; outline: none; }
+.wrap { width: 100%; max-width: 680px; margin-inline: auto; padding: 0 clamp(16px, 4vw, 24px); }
+.wrap.wide { max-width: 860px; }
+
+/* ===== Hero ===== */
+.hero {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(226, 185, 59, .18), transparent 45%),
+    linear-gradient(160deg, var(--navy-800), var(--navy-900));
+  color: #fff;
+  text-align: center;
+  padding: clamp(40px, 9vw, 84px) 20px clamp(64px, 11vw, 110px);
+}
+.hero h1 {
+  font-size: clamp(1.7rem, 6.2vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+.hero .rule { width: 72px; height: 4px; border-radius: 4px; background: var(--gold-light); margin: 18px auto; }
+.hero p { color: #d6def2; font-size: clamp(1rem, 3.2vw, 1.3rem); text-wrap: balance; }
+
+.announce {
+  background: var(--gold-soft);
+  border: 1px solid #ecd9a0;
+  color: #5c4500;
+  border-radius: 14px;
+  padding: 10px 16px;
+  text-align: center;
+  font-weight: 600;
+  margin-top: -34px;
+  margin-bottom: 26px;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+/* ===== The three square tiles ===== */
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* 2 on the first row, the 3rd centred below */
+  gap: var(--gap);
+  margin-top: -44px;
+  padding-bottom: 48px;
+  position: relative;
+}
+.announce + .tiles { margin-top: 0; }
+.tile {
+  flex: 0 0 calc((100% - var(--gap)) / 2);
+  max-width: 290px;
+  aspect-ratio: 1 / 1;       /* true squares, all identical */
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2.6vw, 18px);
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tile:hover, .tile:focus-visible { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.tile:active { transform: translateY(-1px) scale(.97); }
+.tile-icon {
+  width: clamp(60px, 26vw, 104px);
+  aspect-ratio: 1;
+  max-width: 60%;
+  display: grid; place-items: center;
+  background: linear-gradient(145deg, var(--navy-700), var(--navy-900));
+  color: var(--gold-light);
+  border-radius: 28%;
+  transition: transform .25s ease;
+}
+.tile:hover .tile-icon { transform: scale(1.08) rotate(-3deg); }
+.tile-icon svg { width: 56%; height: 56%; }
+.tile-name {
+  font-weight: 700;
+  font-size: clamp(.92rem, 3.8vw, 1.3rem);
+  line-height: 1.4;
+  color: var(--navy-800);
+  text-wrap: balance;
+}
+
+/* ===== Inner pages ===== */
+.page-head {
+  background: linear-gradient(160deg, var(--navy-800), var(--navy-900));
+  color: #fff;
+  padding: 26px 20px 34px;
+  border-bottom: 4px solid var(--gold);
+}
+.page-head .wrap { display: flex; flex-direction: column; gap: 8px; }
+.back {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--gold-light); text-decoration: none; font-weight: 600;
+}
+.back:hover { text-decoration: underline; }
+.page-head h1 { font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 800; }
+.page-head p { color: #cfd8ef; }
+.page-body { padding-top: 26px; padding-bottom: 56px; }
+
+.stack { display: grid; gap: 18px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: clamp(18px, 4vw, 26px);
+  animation: rise .35s ease both;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.card h2 { font-size: 1.2rem; color: var(--navy-800); font-weight: 700; }
+.card .desc { color: var(--text); margin-top: 6px; white-space: pre-line; }
+
+.facts { display: grid; gap: 12px; margin-top: 16px; }
+.fact { background: var(--bg); border-radius: 14px; padding: 10px 14px; border-inline-start: 4px solid var(--gold); }
+.fact b { display: block; font-size: .85rem; color: var(--muted); font-weight: 600; }
+.fact span { white-space: pre-line; }
+
+.badge {
+  display: inline-block; padding: 2px 12px; border-radius: 999px;
+  font-size: .82rem; font-weight: 700; white-space: nowrap;
+  background: var(--navy-100); color: var(--navy-800);
+}
+.badge.required { background: var(--gold-soft); color: #7a5a00; }
+.badge.available { background: #e3f4ea; color: var(--ok); }
+.badge.closed { background: #f0e4e3; color: var(--bad); }
+.badge.new { background: var(--gold-soft); color: #7a5a00; }
+.badge.reviewing { background: var(--navy-100); color: var(--navy-800); }
+.badge.ready { background: #e3f4ea; color: var(--ok); }
+.badge.unavailable { background: #f0e4e3; color: var(--bad); }
+.badge.delivered { background: #eceff4; color: var(--muted); }
+
+.book-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.author { color: var(--muted); font-size: .95rem; margin-top: 2px; }
+
+.empty {
+  text-align: center; color: var(--muted);
+  padding: 42px 16px; background: var(--surface);
+  border: 2px dashed var(--line); border-radius: 20px;
+}
+.empty .big { font-size: 2.4rem; display: block; }
+.loading { text-align: center; color: var(--muted); padding: 40px 0; }
+
+/* ===== Forms ===== */
+.search { position: relative; margin-bottom: 20px; }
+.search input { padding-inline-start: 16px; }
+label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--navy-800); }
+label small { color: var(--muted); font-weight: 400; }
+input, select, textarea {
+  width: 100%;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 11px 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--navy-700); box-shadow: 0 0 0 4px rgba(20, 48, 110, .12);
+}
+textarea { resize: vertical; min-height: 96px; }
+.form { display: grid; gap: 18px; }
+.hp { position: absolute; inset-inline-start: -5000px; width: 1px; height: 1px; overflow: hidden; }
+.err { color: var(--bad); font-weight: 600; min-height: 1.4em; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(145deg, var(--navy-700), var(--navy-900));
+  color: #fff; border: 0; border-radius: 14px;
+  padding: 12px 24px; font-weight: 700; font-size: 1.05rem;
+  cursor: pointer; text-decoration: none;
+  transition: transform .2s, box-shadow .2s, filter .2s;
+  box-shadow: 0 6px 16px rgba(11, 31, 77, .25);
+}
+.btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .6; cursor: wait; transform: none; }
+.btn.gold { background: linear-gradient(145deg, var(--gold-light), var(--gold)); color: var(--navy-900); }
+.btn.ghost { background: transparent; color: var(--navy-800); border: 2px solid var(--line); box-shadow: none; }
+.btn.danger { background: linear-gradient(145deg, #c9382f, #99231c); }
+.btn.sm { padding: 6px 14px; font-size: .9rem; border-radius: 10px; box-shadow: none; }
+
+.success { text-align: center; padding: clamp(28px, 6vw, 48px) 20px; }
+.success .check {
+  width: 86px; height: 86px; border-radius: 50%; margin: 0 auto 18px;
+  background: #e3f4ea; color: var(--ok); display: grid; place-items: center;
+  animation: pop .45s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+.success .check svg { width: 46px; height: 46px; }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success h2 { font-size: 1.5rem; color: var(--navy-800); }
+.success p { color: var(--muted); margin: 8px 0 22px; }
+.success .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ===== Footer & toasts ===== */
+.footer {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 18px clamp(16px, 4vw, 32px);
+  background: var(--navy-900); color: #aab6d6; font-size: .9rem;
+}
+.admin-link { color: #aab6d6; text-decoration: none; }
+.admin-link:hover { color: var(--gold-light); }
+#toasts { position: fixed; bottom: 18px; inset-inline: 0; display: grid; justify-items: center; gap: 8px; z-index: 200; pointer-events: none; }
+.toast { background: var(--navy-900); color: #fff; padding: 10px 20px; border-radius: 12px; box-shadow: var(--shadow-lg); animation: rise .25s ease both; }
+.toast.bad { background: var(--bad); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ===== Bottom navigation (الرئيسية / حسابك) ===== */
+body.has-nav { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+.bottom-nav {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 50;
+  background: rgba(255, 255, 255, .97);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -6px 24px rgba(11, 31, 77, .08);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav .inner { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; }
+.nav-item {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 9px 4px 8px; text-decoration: none; color: var(--muted);
+  font-weight: 700; font-size: .85rem; transition: color .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-item svg { width: 26px; height: 26px; transition: transform .2s; }
+.nav-item:hover svg { transform: translateY(-2px); }
+.nav-item.active { color: var(--navy-800); }
+.nav-item.active::before {
+  content: ''; position: absolute; top: 0; width: 44px; height: 4px;
+  border-radius: 0 0 4px 4px; background: var(--gold-light);
+}
+body.has-nav #toasts { bottom: calc(84px + env(safe-area-inset-bottom)); }
+
+/* ===== Account page ===== */
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--navy-100); padding: 5px; border-radius: 16px; margin-bottom: 18px; }
+.seg button { border: 0; background: transparent; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; color: var(--navy-800); transition: background .2s, color .2s; }
+.seg button[aria-selected="true"] { background: var(--navy-800); color: #fff; box-shadow: var(--shadow); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hint { color: var(--muted); font-size: .85rem; margin-top: 4px; }
+.profile { text-align: center; display: grid; gap: 8px; justify-items: center; }
+.profile h2 { font-size: 1.4rem; }
+.profile .actions-col { display: grid; gap: 10px; width: 100%; max-width: 320px; margin-top: 10px; }
+.avatar {
+  width: 84px; height: 84px; border-radius: 30%; display: grid; place-items: center;
+  background: linear-gradient(145deg, var(--navy-700), var(--navy-900));
+  color: var(--gold-light); font-size: 2.2rem; font-weight: 800;
+}
+.ok-note { color: var(--ok); font-weight: 600; }
+
+/* ===== Anonymous complaints page ===== */
+.privacy {
+  background: var(--gold-soft); border: 1px solid #ecd9a0; color: #5c4500;
+  border-radius: 16px; padding: 12px 16px; margin-bottom: 18px;
+  display: flex; gap: 12px; align-items: flex-start; line-height: 1.7;
+}
+.privacy .lock { font-size: 1.4rem; line-height: 1.4; }
+.counter { color: var(--muted); font-weight: 400; margin-inline-start: auto; }
+.label-row { display: flex; align-items: baseline; }
+
+/* ---- لوحة الإدارة ---- */
+body.admin { background: var(--bg); }
+.a-bar {
+  background: var(--navy-900); color: #fff; border-bottom: 3px solid var(--gold);
+  padding: 10px clamp(14px, 4vw, 28px);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.a-bar b { font-size: 1.1rem; }
+.a-bar .who { color: #c5d0ec; font-size: .9rem; display: flex; align-items: center; gap: 12px; }
+.a-bar .btn.ghost { color: #fff; border-color: rgba(255, 255, 255, .45); }
+.a-bar .btn.ghost:hover { border-color: var(--gold-light); color: var(--gold-light); }
+.a-bar .admin-link { color: #c5d0ec; }
+.a-tabs {
+  display: flex; gap: 6px; overflow-x: auto; background: var(--surface);
+  border-bottom: 1px solid var(--line); padding: 8px clamp(14px, 4vw, 28px);
+  position: sticky; top: 0; z-index: 20;
+}
+.a-tab {
+  border: 0; background: transparent; padding: 8px 16px; border-radius: 999px;
+  font-weight: 600; cursor: pointer; white-space: nowrap; color: var(--muted);
+}
+.a-tab[aria-selected="true"] { background: var(--navy-800); color: #fff; }
+.a-tab .n { background: var(--gold-light); color: var(--navy-900); border-radius: 999px; padding: 0 8px; margin-inline-start: 6px; font-size: .8rem; }
+.a-main { max-width: 980px; margin: 0 auto; padding: 22px clamp(14px, 4vw, 28px) 60px; }
+.a-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
+.a-tools input[type=search] { flex: 1 1 220px; width: auto; }
+.a-tools select { width: auto; flex: 0 0 auto; }
+.a-title { font-size: 1.3rem; font-weight: 800; color: var(--navy-800); margin-bottom: 14px; }
+
+.item { display: grid; gap: 10px; }
+.item-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.item-head h3 { font-size: 1.1rem; color: var(--navy-800); }
+.meta { color: var(--muted); font-size: .9rem; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.item .note-row { display: grid; gap: 8px; }
+.item .note-row textarea { min-height: 60px; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip { border: 2px solid var(--line); background: var(--surface); border-radius: 999px; padding: 3px 14px; cursor: pointer; font-weight: 600; font-size: .9rem; }
+.chip[aria-pressed="true"] { border-color: var(--navy-800); background: var(--navy-800); color: #fff; }
+.login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: linear-gradient(160deg, var(--navy-800), var(--navy-900)); }
+.login-card { width: 100%; max-width: 400px; }
+.login-card h1 { color: var(--navy-800); font-size: 1.5rem; text-align: center; margin-bottom: 4px; }
+.login-card p.sub { color: var(--muted); text-align: center; margin-bottom: 18px; }
+.off { opacity: .55; }
+.check-row { display: flex; align-items: center; gap: 10px; }
+.check-row input { width: 22px; height: 22px; }
+.check-row label { margin: 0; }
+
+dialog { border: 0; border-radius: 22px; padding: 0; width: min(560px, calc(100% - 24px)); max-height: 92vh; box-shadow: var(--shadow-lg); font-family: var(--font); }
+dialog::backdrop { background: rgba(7, 21, 56, .55); }
+dialog form { padding: 22px; display: grid; gap: 14px; max-height: 92vh; overflow: auto; }
+dialog h2 { color: var(--navy-800); }
+dialog .actions { justify-content: flex-start; }
+
+/* complaints notice (same look as on the public page) */
+.privacy { background: var(--gold-soft); border: 1px solid #ecd9a0; color: #5c4500; border-radius: 16px; padding: 12px 16px; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start; }
+.privacy .lock { font-size: 1.3rem; }
+.a-tools input[type=search] { min-width: 0; }
+.item-head .actions { gap: 6px; }
+
+/* ---- شريط النسخة بدون خادم ---- */
+.static-banner { background: #fff4d6; color: #5c4300; border-bottom: 1px solid #e6c870; padding: 10px 16px; text-align: center; font-size: 14px; line-height: 1.6; }
+
+</style>
+</head>
+<body>
+<div id="site">
+  <a class="skip" href="#app">تخطَّ إلى المحتوى</a>
+  <header class="topbar">
+    <a class="brand" href="#/" aria-label="الصفحة الرئيسية">
+      <span class="brand-mark" aria-hidden="true">📚</span>
+      <span>مكتبة مدرستنا</span>
+    </a>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="footer">
+    <span id="footer-text">مكتبة المدرسة</span>
+    <a class="admin-link" href="?admin">دخول أمين المكتبة</a>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+    <div class="inner">
+      <a class="nav-item active" href="#/" data-nav="home" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+        <span>الرئيسية</span>
+      </a>
+      <a class="nav-item" href="#/account" data-nav="account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+        <span>حسابك</span>
+      </a>
+    </div>
+  </nav>
+
+  </div>
+<div id="root" hidden></div>
+<noscript><p class="noscript">يحتاج هذا الموقع إلى تفعيل JavaScript ليعمل.</p></noscript>
+<script>
+/* الصفحة الرئيسية للطلاب، ولوحة الإدارة بإضافة ?admin للرابط */
+if (location.search.includes('admin')) {
+  document.body.className = 'admin';
+  document.getElementById('site').remove();
+  document.getElementById('root').hidden = false;
+  document.title = 'لوحة إدارة المكتبة';
+// مكتبة مدرستنا - لوحة الإدارة (JavaScript)
+(() => {
+// Shared helpers: DOM builder, API client, formatting. No user data is ever put into innerHTML.
+
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === false || v == null) continue;
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (k === 'svg') el.innerHTML = v; // trusted, static icon markup only
+    else if (['value', 'checked', 'disabled', 'selected', 'required'].includes(k)) el[k] = v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  const add = (c) => {
+    if (c == null || c === false) return;
+    if (Array.isArray(c)) return c.forEach(add);
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  };
+  children.forEach(add);
+  return el;
+}
+
+class ApiError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
+let csrfToken = '';
+const setCsrf = (t) => { csrfToken = t || ''; };
+
+const HAS_BACKEND = !(location.protocol === 'file:' || /\.github\.io$/.test(location.hostname));
+async function api(method, url, body) {
+  if (!HAS_BACKEND) throw new ApiError(0, 'هذه نسخة عرض بدون خادم: لا يمكن تسجيل الدخول أو حفظ أو جلب بيانات هنا. شغّل النسخة الكاملة على خادم Python.');
+  const opts = { method, headers: {}, credentials: 'same-origin' };
+  if (body !== undefined) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  if (method !== 'GET') opts.headers['X-CSRF-Token'] = csrfToken;
+  let res;
+  try {
+    res = await fetch(url, opts);
+  } catch {
+    throw new ApiError(0, 'تعذّر الاتصال بالخادم، تحقق من الاتصال وحاول مرة أخرى');
+  }
+  let data = {};
+  try { data = await res.json(); } catch { /* empty body */ }
+  if (!res.ok) throw new ApiError(res.status, data.error || 'حدث خطأ غير متوقع');
+  return data;
+}
+
+const REQUEST_STATUS = {
+  new: 'جديد',
+  reviewing: 'قيد المراجعة',
+  ready: 'جاهز للاستلام',
+  unavailable: 'غير متوفر',
+  delivered: 'تم التسليم',
+};
+
+const BOOK_STATUS = {
+  required: 'مطلوب',
+  available: 'متوفر في المكتبة',
+  closed: 'غير متاح حالياً',
+};
+
+function fmtDate(ymd) {
+  if (!ymd) return '';
+  const [y, m, d] = ymd.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('ar-EG', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+}
+
+function fmtDateTime(iso) {
+  return new Date(iso).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+function debounce(fn, ms = 300) {
+  let t;
+  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+
+function toast(message, kind = 'ok') {
+  let box = document.getElementById('toasts');
+  if (!box) {
+    box = h('div', { id: 'toasts', 'aria-live': 'polite' });
+    document.body.append(box);
+  }
+  const t = h('div', { class: `toast ${kind}` }, message);
+  box.append(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+if (!HAS_BACKEND) {
+  const b = document.createElement('div');
+  b.className = 'static-banner';
+  b.textContent = 'نسخة عرض (واجهة فقط): تسجيل الدخول والحسابات والكتب والمسابقات والطلبات تحتاج خادم المكتبة (Python) وقاعدة بياناته، وهي غير متصلة هنا.';
+  document.body.prepend(b);
+}
+
+
+const root = document.getElementById('root');
+let me = null;
+let meId = null;   // id of the signed-in admin (an admin cannot edit their own row)
+let activeTab = 'requests';
+
+/* ---------- boot ---------- */
+async function boot() {
+  try {
+    const r = await api('GET', '/api/admin/me');
+    setCsrf(r.csrf);
+    me = r.username;
+    meId = r.id;
+    renderDashboard();
+  } catch {
+    renderLogin();
+  }
+}
+
+/* ---------- login ---------- */
+function renderLogin() {
+  const err = h('p', { class: 'err', role: 'alert' });
+  const user = h('input', { id: 'u', autocomplete: 'username', required: true, maxlength: 64 });
+  const pass = h('input', { id: 'p', type: 'password', autocomplete: 'current-password', required: true, maxlength: 256 });
+  const btn = h('button', { class: 'btn', type: 'submit' }, 'تسجيل الدخول');
+  const form = h('form', { class: 'card form login-card' },
+    h('h1', {}, 'لوحة إدارة المكتبة'),
+    h('p', { class: 'sub' }, 'خاصة بأمين المكتبة'),
+    h('div', {}, h('label', { for: 'u' }, 'اسم المستخدم'), user),
+    h('div', {}, h('label', { for: 'p' }, 'كلمة المرور'), pass),
+    err, btn,
+    h('a', { class: 'back', href: '/' }, '→ العودة إلى الموقع'));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.textContent = '';
+    btn.disabled = true;
+    try {
+      const r = await api('POST', '/api/admin/login', { username: user.value, password: pass.value });
+      setCsrf(r.csrf);
+      me = r.username;
+      meId = r.user.id;
+      renderDashboard();
+    } catch (ex) {
+      err.textContent = ex.message;
+      btn.disabled = false;
+      pass.value = '';
+    }
+  });
+  root.replaceChildren(h('div', { class: 'login-wrap' }, form));
+  user.focus();
+}
+
+/* ---------- shell ---------- */
+const BADGE = { requests: 'new-count', complaints: 'new-complaints' };
+const TABS = [
+  ['requests', 'طلبات الكتب'],
+  ['users', 'المستخدمون'],
+  ['complaints', 'ما يضايق الطلاب'],
+  ['competitions', 'المسابقات'],
+  ['books', 'الكتب المطلوبة'],
+  ['settings', 'محتوى الموقع'],
+  ['account', 'الحساب'],
+];
+
+async function renderDashboard() {
+  const panel = h('div', { class: 'a-main' });
+  const tabs = h('div', { class: 'a-tabs', role: 'tablist' }, TABS.map(([id, label]) =>
+    h('button', {
+      class: 'a-tab', role: 'tab', id: `tab-${id}`, 'aria-selected': String(id === activeTab),
+      onclick: () => { activeTab = id; renderDashboard(); },
+    }, label, BADGE[id] && h('span', { class: 'n', id: BADGE[id], hidden: true }))));
+  const logout = h('button', {
+    class: 'btn sm ghost logout',
+    onclick: async () => { try { await api('POST', '/api/admin/logout', {}); } catch { /* ignore */ } me = null; renderLogin(); },
+  }, 'تسجيل الخروج');
+
+  root.replaceChildren(
+    h('header', { class: 'a-bar' },
+      h('b', {}, '📚 لوحة إدارة المكتبة'),
+      h('div', { class: 'who' }, h('span', {}, `مرحباً، ${me}`), h('a', { class: 'admin-link', href: '/' }, 'عرض الموقع'), logout)),
+    tabs, panel);
+
+  api('GET', '/api/admin/stats').then((s) => {
+    for (const [key, id] of [['new_requests', 'new-count'], ['new_complaints', 'new-complaints']]) {
+      const n = document.getElementById(id);
+      if (n && s[key]) { n.textContent = s[key]; n.hidden = false; }
+    }
+  }).catch(() => {});
+
+  const views = { requests: viewRequests, users: viewUsers, complaints: viewComplaints, competitions: viewCompetitions, books: viewBooks, settings: viewSettings, account: viewAccount };
+  try {
+    await views[activeTab](panel);
+  } catch (e) {
+    handleError(e);
+  }
+}
+
+function handleError(e) {
+  if (e.status === 401) { me = null; renderLogin(); return; }
+  toast(e.message, 'bad');
+}
+
+/* ---------- generic modal form ---------- */
+function openForm({ title, fields, values = {}, submitLabel = 'حفظ', onSubmit }) {
+  const dlg = h('dialog');
+  const err = h('p', { class: 'err', role: 'alert' });
+  const inputs = {};
+  const rows = fields.map((f) => {
+    const id = `m-${f.name}`;
+    let input;
+    const val = values[f.name] ?? f.default ?? '';
+    if (f.type === 'textarea') input = h('textarea', { id, maxlength: f.max, value: val });
+    else if (f.type === 'select') input = h('select', { id }, Object.entries(f.options).map(([k, v]) => h('option', { value: k, selected: k === val }, v)));
+    else if (f.type === 'checkbox') input = h('input', { id, type: 'checkbox', checked: val === '' ? true : !!val });
+    else input = h('input', { id, type: f.type || 'text', maxlength: f.max, value: val });
+    inputs[f.name] = input;
+    if (f.type === 'checkbox') return h('div', { class: 'check-row' }, input, h('label', { for: id }, f.label));
+    return h('div', {}, h('label', { for: id }, f.label, f.optional && h('small', {}, ' (اختياري)')), input);
+  });
+  const save = h('button', { class: 'btn', type: 'submit' }, submitLabel);
+  const cancel = h('button', { class: 'btn ghost', type: 'button', onclick: () => dlg.close() }, 'إلغاء');
+  const form = h('form', { novalidate: true }, h('h2', {}, title), rows, err, h('div', { class: 'actions' }, save, cancel));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.textContent = '';
+    const data = {};
+    for (const f of fields) data[f.name] = f.type === 'checkbox' ? inputs[f.name].checked : inputs[f.name].value;
+    save.disabled = true;
+    try {
+      await onSubmit(data);
+      dlg.close();
+    } catch (ex) {
+      if (ex.status === 401) { dlg.close(); handleError(ex); return; }
+      err.textContent = ex.message;
+      save.disabled = false;
+    }
+  });
+  dlg.append(form);
+  dlg.addEventListener('close', () => dlg.remove());
+  document.body.append(dlg);
+  dlg.showModal();
+}
+
+const confirmDelete = (what) => window.confirm(`هل أنت متأكد من حذف ${what}؟ لا يمكن التراجع عن ذلك.`);
+
+/* ---------- requests ---------- */
+async function viewRequests(panel) {
+  let status = '';
+  const search = h('input', { type: 'search', placeholder: 'ابحث باسم الطالب أو الفصل أو الكتاب…', 'aria-label': 'بحث في الطلبات', maxlength: 100 });
+  const chips = h('div', { class: 'chips' });
+  const list = h('div', { class: 'stack' });
+  panel.append(h('h2', { class: 'a-title' }, 'طلبات الكتب من الطلاب'), h('div', { class: 'a-tools' }, search), chips, list);
+
+  async function load() {
+    const qs = new URLSearchParams();
+    if (search.value.trim()) qs.set('q', search.value.trim());
+    if (status) qs.set('status', status);
+    const data = await api('GET', '/api/admin/requests?' + qs);
+    const total = Object.values(data.counts).reduce((a, b) => a + b, 0);
+    chips.replaceChildren(
+      chip('', `الكل (${total})`),
+      ...Object.entries(REQUEST_STATUS).map(([k, v]) => chip(k, `${v} (${data.counts[k] || 0})`)));
+    if (!data.items.length) {
+      list.replaceChildren(h('div', { class: 'empty' }, h('span', { class: 'big' }, '📭'), 'لا توجد طلبات مطابقة.'));
+      return;
+    }
+    list.replaceChildren(...data.items.map(requestCard));
+  }
+  const reload = () => load().catch(handleError);
+
+  function chip(value, label) {
+    return h('button', { class: 'chip', 'aria-pressed': String(status === value), onclick: () => { status = value; reload(); } }, label);
+  }
+
+  function requestCard(r) {
+    const select = h('select', { 'aria-label': 'حالة الطلب' },
+      Object.entries(REQUEST_STATUS).map(([k, v]) => h('option', { value: k, selected: k === r.status }, v)));
+    select.addEventListener('change', async () => {
+      try {
+        await api('PATCH', `/api/admin/requests/${r.id}`, { status: select.value });
+        toast('تم تحديث حالة الطلب');
+        reload();
+      } catch (e) { handleError(e); select.value = r.status; }
+    });
+    const note = h('textarea', { placeholder: 'ملاحظة للأمين (لا تظهر للطلاب)', maxlength: 500, 'aria-label': 'ملاحظة', value: r.admin_note });
+    return h('article', { class: 'card item' },
+      h('div', { class: 'item-head' },
+        h('div', {}, h('h3', {}, r.book_title), h('p', { class: 'meta' }, `${r.student_name} — ${r.class_name}`)),
+        h('span', { class: `badge ${r.status}` }, REQUEST_STATUS[r.status])),
+      r.notes && h('p', { class: 'desc' }, 'ملاحظات الطالب: ' + r.notes),
+      h('p', { class: 'meta' }, 'وصل في ' + fmtDateTime(r.created_at)),
+      h('div', { class: 'note-row' }, note),
+      h('div', { class: 'actions' },
+        select,
+        h('button', { class: 'btn sm', onclick: async () => {
+          try { await api('PATCH', `/api/admin/requests/${r.id}`, { admin_note: note.value }); toast('تم حفظ الملاحظة'); } catch (e) { handleError(e); }
+        } }, 'حفظ الملاحظة'),
+        h('button', { class: 'btn sm danger', onclick: async () => {
+          if (!confirmDelete('هذا الطلب')) return;
+          try { await api('DELETE', `/api/admin/requests/${r.id}`); toast('تم حذف الطلب'); reload(); } catch (e) { handleError(e); }
+        } }, 'حذف')));
+  }
+
+  search.addEventListener('input', debounce(reload, 250));
+  await load();
+}
+
+/* ---------- competitions ---------- */
+const COMP_FIELDS = [
+  { name: 'title', label: 'اسم المسابقة', max: 150 },
+  { name: 'description', label: 'وصف المسابقة', type: 'textarea', max: 1500, optional: true },
+  { name: 'conditions', label: 'شروط الاشتراك', type: 'textarea', max: 1500, optional: true },
+  { name: 'event_date', label: 'تاريخ المسابقة', type: 'date', optional: true },
+  { name: 'event_note', label: 'ملاحظة على الموعد (مثل: الساعة 10 صباحاً في المكتبة)', max: 150, optional: true },
+  { name: 'how_to_join', label: 'طريقة المشاركة', type: 'textarea', max: 1500, optional: true },
+  { name: 'is_active', label: 'ظاهرة للطلاب', type: 'checkbox' },
+];
+
+async function viewCompetitions(panel) {
+  const list = h('div', { class: 'stack' });
+  panel.append(
+    h('h2', { class: 'a-title' }, 'المسابقات'),
+    h('div', { class: 'a-tools' }, h('button', { class: 'btn gold', onclick: () => edit(null) }, '＋ إضافة مسابقة')),
+    list);
+
+  async function load() {
+    const { items } = await api('GET', '/api/admin/competitions');
+    if (!items.length) {
+      list.replaceChildren(h('div', { class: 'empty' }, h('span', { class: 'big' }, '🏆'), 'لم تتم إضافة أي مسابقة بعد.'));
+      return;
+    }
+    list.replaceChildren(...items.map((c) =>
+      h('article', { class: 'card item' },
+        h('div', { class: 'item-head' },
+          h('div', { class: c.is_active ? '' : 'off' }, h('h3', {}, c.title),
+            h('p', { class: 'meta' }, [c.event_date && fmtDate(c.event_date), c.event_note].filter(Boolean).join(' — ') || 'بدون موعد')),
+          h('span', { class: `badge ${c.is_active ? 'available' : 'closed'}` }, c.is_active ? 'ظاهرة' : 'مخفية')),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn sm', onclick: () => edit(c) }, 'تعديل'),
+          h('button', { class: 'btn sm danger', onclick: async () => {
+            if (!confirmDelete(`المسابقة «${c.title}»`)) return;
+            try { await api('DELETE', `/api/admin/competitions/${c.id}`); toast('تم الحذف'); load(); } catch (e) { handleError(e); }
+          } }, 'حذف')))));
+  }
+
+  function edit(c) {
+    openForm({
+      title: c ? 'تعديل المسابقة' : 'إضافة مسابقة',
+      fields: COMP_FIELDS,
+      values: c || {},
+      onSubmit: async (data) => {
+        if (c) await api('PUT', `/api/admin/competitions/${c.id}`, data);
+        else await api('POST', '/api/admin/competitions', data);
+        toast('تم الحفظ');
+        load().catch(handleError);
+      },
+    });
+  }
+  await load();
+}
+
+/* ---------- books ---------- */
+const BOOK_FIELDS = [
+  { name: 'title', label: 'اسم الكتاب', max: 200 },
+  { name: 'author', label: 'اسم المؤلف', max: 120, optional: true },
+  { name: 'description', label: 'وصف مختصر', type: 'textarea', max: 1000, optional: true },
+  { name: 'status', label: 'حالة الكتاب', type: 'select', options: BOOK_STATUS, default: 'required' },
+];
+
+async function viewBooks(panel) {
+  const search = h('input', { type: 'search', placeholder: 'ابحث عن كتاب…', 'aria-label': 'بحث', maxlength: 100 });
+  const list = h('div', { class: 'stack' });
+  panel.append(
+    h('h2', { class: 'a-title' }, 'الكتب المطلوبة'),
+    h('div', { class: 'a-tools' }, search, h('button', { class: 'btn gold', onclick: () => edit(null) }, '＋ إضافة كتاب')),
+    list);
+
+  async function load() {
+    const { items } = await api('GET', '/api/admin/books?q=' + encodeURIComponent(search.value.trim()));
+    if (!items.length) {
+      list.replaceChildren(h('div', { class: 'empty' }, h('span', { class: 'big' }, '📚'),
+        search.value.trim() ? 'لا توجد نتائج.' : 'لم تتم إضافة أي كتاب بعد.'));
+      return;
+    }
+    list.replaceChildren(...items.map((b) =>
+      h('article', { class: 'card item' },
+        h('div', { class: 'item-head' },
+          h('div', {}, h('h3', {}, b.title), b.author && h('p', { class: 'meta' }, b.author)),
+          h('span', { class: `badge ${b.status}` }, BOOK_STATUS[b.status])),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn sm', onclick: () => edit(b) }, 'تعديل'),
+          h('button', { class: 'btn sm danger', onclick: async () => {
+            if (!confirmDelete(`الكتاب «${b.title}»`)) return;
+            try { await api('DELETE', `/api/admin/books/${b.id}`); toast('تم الحذف'); load(); } catch (e) { handleError(e); }
+          } }, 'حذف')))));
+  }
+
+  function edit(b) {
+    openForm({
+      title: b ? 'تعديل الكتاب' : 'إضافة كتاب',
+      fields: BOOK_FIELDS,
+      values: b || {},
+      onSubmit: async (data) => {
+        if (b) await api('PUT', `/api/admin/books/${b.id}`, data);
+        else await api('POST', '/api/admin/books', data);
+        toast('تم الحفظ');
+        load().catch(handleError);
+      },
+    });
+  }
+  search.addEventListener('input', debounce(() => load().catch(handleError), 250));
+  await load();
+}
+
+/* ---------- users ---------- */
+async function viewUsers(panel) {
+  let filter = '';
+  const title = h('h2', { class: 'a-title' }, 'المستخدمون المسجّلون');
+  const search = h('input', { type: 'search', placeholder: 'ابحث بالاسم أو اسم المستخدم…', 'aria-label': 'بحث في المستخدمين', maxlength: 100 });
+  const chips = h('div', { class: 'chips' });
+  const list = h('div', { class: 'stack' });
+  panel.append(title, h('div', { class: 'a-tools' }, search), chips, list);
+
+  const reload = () => load().catch(handleError);
+  const chip = (value, label) =>
+    h('button', { class: 'chip', 'aria-pressed': String(filter === value), onclick: () => { filter = value; reload(); } }, label);
+
+  async function act(fn, okMsg) {
+    try { await fn(); toast(okMsg); reload(); } catch (e) { handleError(e); }
+  }
+
+  function userCard(u) {
+    const mine = u.id === meId;
+    const patch = (body) => api('PATCH', `/api/admin/users/${u.id}`, body);
+    const actions = mine ? null : h('div', { class: 'actions' },
+      h('button', { class: 'btn sm', onclick: () => {
+        if (u.is_active && !window.confirm(`تعطيل حساب «${u.full_name}»؟ سيتم تسجيل خروجه ولن يستطيع الدخول.`)) return;
+        act(() => patch({ is_active: !u.is_active }), u.is_active ? 'تم تعطيل الحساب' : 'تم تفعيل الحساب');
+      } }, u.is_active ? 'تعطيل الحساب' : 'تفعيل الحساب'),
+      h('button', { class: 'btn sm ghost', onclick: () => {
+        const toAdmin = u.role !== 'admin';
+        if (toAdmin && !window.confirm(`منح «${u.full_name}» صلاحيات الإدارة الكاملة؟`)) return;
+        act(() => patch({ role: toAdmin ? 'admin' : 'user' }), toAdmin ? 'تمت الترقية إلى إدارة' : 'تم التحويل إلى حساب طالب');
+      } }, u.role === 'admin' ? 'تحويل إلى طالب' : 'ترقية إلى إدارة'),
+      h('button', { class: 'btn sm ghost', onclick: () => openForm({
+        title: `كلمة مرور جديدة لـ ${u.full_name}`,
+        fields: [{ name: 'new_password', label: 'كلمة المرور الجديدة (8 أحرف على الأقل)', type: 'password', max: 128 }],
+        submitLabel: 'تعيين كلمة المرور',
+        onSubmit: async (d) => { await patch({ new_password: d.new_password }); toast('تم تعيين كلمة المرور وتسجيل خروج صاحب الحساب'); },
+      }) }, 'كلمة مرور جديدة'),
+      h('button', { class: 'btn sm danger', onclick: () => {
+        if (!confirmDelete(`حساب «${u.full_name}»`)) return;
+        act(() => api('DELETE', `/api/admin/users/${u.id}`), 'تم حذف الحساب');
+      } }, 'حذف'));
+    return h('article', { class: 'card item' },
+      h('div', { class: 'item-head' },
+        h('div', { class: u.is_active ? '' : 'off' }, h('h3', {}, u.full_name), h('p', { class: 'meta', dir: 'ltr' }, '@' + u.username)),
+        h('div', { class: 'actions' },
+          h('span', { class: `badge ${u.role === 'admin' ? 'required' : 'reviewing'}` }, u.role === 'admin' ? 'إدارة' : 'طالب'),
+          h('span', { class: `badge ${u.is_active ? 'available' : 'closed'}` }, u.is_active ? 'نشط' : 'معطّل'),
+          mine && h('span', { class: 'badge' }, 'حسابك'))),
+      h('p', { class: 'meta' }, `انضم في ${fmtDateTime(u.created_at)} — آخر دخول: ${u.last_login ? fmtDateTime(u.last_login) : 'لم يدخل بعد'}`),
+      actions);
+  }
+
+  async function load() {
+    const qs = new URLSearchParams();
+    if (search.value.trim()) qs.set('q', search.value.trim());
+    if (filter) qs.set('filter', filter);
+    const { items, counts: c } = await api('GET', '/api/admin/users?' + qs);
+    title.textContent = `المستخدمون المسجّلون (${c.total})`;
+    chips.replaceChildren(chip('', `الكل (${c.total})`), chip('active', `نشط (${c.active})`),
+      chip('disabled', `معطّل (${c.disabled})`), chip('admin', `إدارة (${c.admins})`));
+    list.replaceChildren(...(items.length
+      ? items.map(userCard)
+      : [h('div', { class: 'empty' }, h('span', { class: 'big' }, '👥'), 'لا يوجد مستخدمون مطابقون.')]));
+  }
+  search.addEventListener('input', debounce(reload, 250));
+  await load();
+}
+
+/* ---------- anonymous complaints ---------- */
+const COMPLAINT_STATUS = { new: 'جديدة', read: 'تمت القراءة' };
+
+async function viewComplaints(panel) {
+  let status = '';
+  const chips = h('div', { class: 'chips' });
+  const list = h('div', { class: 'stack' });
+  panel.append(
+    h('h2', { class: 'a-title' }, 'ما يضايق الطلاب في المدرسة'),
+    h('div', { class: 'privacy', role: 'note' }, h('span', { class: 'lock', 'aria-hidden': 'true' }, '🔒'),
+      h('p', {}, 'هذه الرسائل مجهولة: لا يتم حفظ اسم الكاتب ولا حسابه ولا أي معلومة عنه، لذلك لا يمكن معرفة من أرسلها.')),
+    chips, list);
+
+  const reload = () => load().catch(handleError);
+  const chip = (value, label) =>
+    h('button', { class: 'chip', 'aria-pressed': String(status === value), onclick: () => { status = value; reload(); } }, label);
+
+  async function load() {
+    const { items, counts } = await api('GET', '/api/admin/complaints' + (status ? `?status=${status}` : ''));
+    chips.replaceChildren(chip('', `الكل (${counts.new + counts.read})`),
+      chip('new', `جديدة (${counts.new})`), chip('read', `تمت القراءة (${counts.read})`));
+    if (!items.length) {
+      list.replaceChildren(h('div', { class: 'empty' }, h('span', { class: 'big' }, '📭'), 'لا توجد رسائل.'));
+      return;
+    }
+    list.replaceChildren(...items.map((c) =>
+      h('article', { class: 'card item' },
+        h('div', { class: 'item-head' },
+          h('p', { class: 'meta' }, fmtDate(c.created_on)),
+          h('span', { class: `badge ${c.status === 'new' ? 'new' : 'delivered'}` }, COMPLAINT_STATUS[c.status])),
+        h('p', { class: 'desc' }, c.message),
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn sm', onclick: async () => {
+            try { await api('PATCH', `/api/admin/complaints/${c.id}`, { status: c.status === 'new' ? 'read' : 'new' }); reload(); } catch (e) { handleError(e); }
+          } }, c.status === 'new' ? 'تحديد كمقروءة' : 'إرجاع إلى جديدة'),
+          h('button', { class: 'btn sm danger', onclick: async () => {
+            if (!confirmDelete('هذه الرسالة')) return;
+            try { await api('DELETE', `/api/admin/complaints/${c.id}`); toast('تم الحذف'); reload(); } catch (e) { handleError(e); }
+          } }, 'حذف'))))); 
+  }
+  await load();
+}
+
+/* ---------- site content ---------- */
+async function viewSettings(panel) {
+  const s = await api('GET', '/api/settings');
+  const err = h('p', { class: 'err', role: 'alert' });
+  const el = {
+    welcome_title: h('input', { id: 's1', maxlength: 120, value: s.welcome_title }),
+    welcome_subtitle: h('input', { id: 's2', maxlength: 200, value: s.welcome_subtitle }),
+    announcement: h('input', { id: 's3', maxlength: 300, value: s.announcement, placeholder: 'اتركه فارغاً لإخفاء الإعلان' }),
+    footer_text: h('input', { id: 's4', maxlength: 200, value: s.footer_text }),
+    requests_open: h('input', { id: 's5', type: 'checkbox', checked: s.requests_open }),
+  };
+  const form = h('form', { class: 'card form', novalidate: true },
+    h('div', {}, h('label', { for: 's1' }, 'عنوان الترحيب'), el.welcome_title),
+    h('div', {}, h('label', { for: 's2' }, 'العبارة الترحيبية'), el.welcome_subtitle),
+    h('div', {}, h('label', { for: 's3' }, 'إعلان أعلى الصفحة الرئيسية'), el.announcement),
+    h('div', {}, h('label', { for: 's4' }, 'نص أسفل الصفحة'), el.footer_text),
+    h('div', { class: 'check-row' }, el.requests_open, h('label', { for: 's5' }, 'استقبال طلبات الكتب من الطلاب')),
+    err, h('div', { class: 'actions' }, h('button', { class: 'btn', type: 'submit' }, 'حفظ التغييرات')));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.textContent = '';
+    try {
+      await api('PUT', '/api/admin/settings', {
+        welcome_title: el.welcome_title.value, welcome_subtitle: el.welcome_subtitle.value,
+        announcement: el.announcement.value, footer_text: el.footer_text.value,
+        requests_open: el.requests_open.checked,
+      });
+      toast('تم حفظ محتوى الموقع');
+    } catch (ex) {
+      if (ex.status === 401) return handleError(ex);
+      err.textContent = ex.message;
+    }
+  });
+  panel.append(h('h2', { class: 'a-title' }, 'محتوى الموقع'), form);
+}
+
+/* ---------- account ---------- */
+async function viewAccount(panel) {
+  const err = h('p', { class: 'err', role: 'alert' });
+  const cur = h('input', { id: 'c1', type: 'password', autocomplete: 'current-password', maxlength: 256 });
+  const nw = h('input', { id: 'c2', type: 'password', autocomplete: 'new-password', maxlength: 256 });
+  const again = h('input', { id: 'c3', type: 'password', autocomplete: 'new-password', maxlength: 256 });
+  const form = h('form', { class: 'card form', novalidate: true },
+    h('div', {}, h('label', { for: 'c1' }, 'كلمة المرور الحالية'), cur),
+    h('div', {}, h('label', { for: 'c2' }, 'كلمة المرور الجديدة ', h('small', {}, '(8 أحرف على الأقل)')), nw),
+    h('div', {}, h('label', { for: 'c3' }, 'تأكيد كلمة المرور الجديدة'), again),
+    err, h('div', { class: 'actions' }, h('button', { class: 'btn', type: 'submit' }, 'تغيير كلمة المرور')));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.textContent = '';
+    if (nw.value !== again.value) { err.textContent = 'تأكيد كلمة المرور غير مطابق'; return; }
+    try {
+      await api('POST', '/api/admin/password', { current: cur.value, new: nw.value });
+      toast('تم تغيير كلمة المرور');
+      form.reset();
+    } catch (ex) {
+      if (ex.status === 401) return handleError(ex);
+      err.textContent = ex.message;
+    }
+  });
+  panel.append(h('h2', { class: 'a-title' }, 'الحساب'), form);
+}
+
+boot();
+
+})();
+
+} else {
+  document.body.className = 'has-nav';
+// مكتبة مدرستنا - واجهة الطلاب (JavaScript)
+(() => {
+// Shared helpers: DOM builder, API client, formatting. No user data is ever put into innerHTML.
+
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === false || v == null) continue;
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (k === 'svg') el.innerHTML = v; // trusted, static icon markup only
+    else if (['value', 'checked', 'disabled', 'selected', 'required'].includes(k)) el[k] = v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  const add = (c) => {
+    if (c == null || c === false) return;
+    if (Array.isArray(c)) return c.forEach(add);
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  };
+  children.forEach(add);
+  return el;
+}
+
+class ApiError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
+let csrfToken = '';
+const setCsrf = (t) => { csrfToken = t || ''; };
+
+const HAS_BACKEND = !(location.protocol === 'file:' || /\.github\.io$/.test(location.hostname));
+async function api(method, url, body) {
+  if (!HAS_BACKEND) throw new ApiError(0, 'هذه نسخة عرض بدون خادم: لا يمكن تسجيل الدخول أو حفظ أو جلب بيانات هنا. شغّل النسخة الكاملة على خادم Python.');
+  const opts = { method, headers: {}, credentials: 'same-origin' };
+  if (body !== undefined) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  if (method !== 'GET') opts.headers['X-CSRF-Token'] = csrfToken;
+  let res;
+  try {
+    res = await fetch(url, opts);
+  } catch {
+    throw new ApiError(0, 'تعذّر الاتصال بالخادم، تحقق من الاتصال وحاول مرة أخرى');
+  }
+  let data = {};
+  try { data = await res.json(); } catch { /* empty body */ }
+  if (!res.ok) throw new ApiError(res.status, data.error || 'حدث خطأ غير متوقع');
+  return data;
+}
+
+const REQUEST_STATUS = {
+  new: 'جديد',
+  reviewing: 'قيد المراجعة',
+  ready: 'جاهز للاستلام',
+  unavailable: 'غير متوفر',
+  delivered: 'تم التسليم',
+};
+
+const BOOK_STATUS = {
+  required: 'مطلوب',
+  available: 'متوفر في المكتبة',
+  closed: 'غير متاح حالياً',
+};
+
+function fmtDate(ymd) {
+  if (!ymd) return '';
+  const [y, m, d] = ymd.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('ar-EG', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+}
+
+function fmtDateTime(iso) {
+  return new Date(iso).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+function debounce(fn, ms = 300) {
+  let t;
+  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+
+function toast(message, kind = 'ok') {
+  let box = document.getElementById('toasts');
+  if (!box) {
+    box = h('div', { id: 'toasts', 'aria-live': 'polite' });
+    document.body.append(box);
+  }
+  const t = h('div', { class: `toast ${kind}` }, message);
+  box.append(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+if (!HAS_BACKEND) {
+  const b = document.createElement('div');
+  b.className = 'static-banner';
+  b.textContent = 'نسخة عرض (واجهة فقط): تسجيل الدخول والحسابات والكتب والمسابقات والطلبات تحتاج خادم المكتبة (Python) وقاعدة بياناته، وهي غير متصلة هنا.';
+  document.body.prepend(b);
+}
+
+
+const app = document.getElementById('app');
+let user = null;            // the signed-in account (or null); the server decides what it may do
+let accountTab = 'signup';  // which form the account page shows when signed out
+let settings = { welcome_title: 'أهلاً بك في مكتبة مدرستنا 📚', welcome_subtitle: '', announcement: '', footer_text: '', requests_open: true };
+
+const ICONS = {
+  trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
+  books: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/></svg>',
+  pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+  complaint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zM12 7v4M12 14h.01"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+};
+
+/* ---------- shared pieces ---------- */
+function pageShell(title, subtitle, ...body) {
+  return [
+    h('section', { class: 'page-head' },
+      h('div', { class: 'wrap wide' },
+        h('a', { class: 'back', href: '#/' }, '→ الصفحة الرئيسية'),
+        h('h1', {}, title),
+        subtitle && h('p', {}, subtitle))),
+    h('section', { class: 'wrap wide page-body' }, ...body),
+  ];
+}
+
+function show(nodes) {
+  app.replaceChildren(...[].concat(nodes));
+  window.scrollTo(0, 0);
+}
+
+const loading = () => h('p', { class: 'loading' }, 'جارٍ التحميل…');
+const errorBox = (msg) => h('div', { class: 'empty' }, h('span', { class: 'big' }, '⚠️'), msg);
+
+function fact(label, value) {
+  if (!value) return null;
+  return h('div', { class: 'fact' }, h('b', {}, label), h('span', {}, value));
+}
+
+/* ---------- Home ---------- */
+function tile(href, icon, name) {
+  return h('a', { class: 'tile', href },
+    h('span', { class: 'tile-icon', svg: ICONS[icon] }),
+    h('span', { class: 'tile-name' }, name));
+}
+
+function renderHome() {
+  show([
+    h('section', { class: 'hero' },
+      h('h1', {}, settings.welcome_title),
+      h('div', { class: 'rule' }),
+      settings.welcome_subtitle && h('p', {}, settings.welcome_subtitle)),
+    h('div', { class: 'wrap' },
+      settings.announcement && h('div', { class: 'announce', role: 'status' }, settings.announcement),
+      h('nav', { class: 'tiles', 'aria-label': 'أقسام المكتبة' },
+        tile('#/competitions', 'trophy', 'مسابقات المكتبة'),
+        tile('#/books', 'books', 'الكتب'),
+        tile('#/request', 'pen', 'اطلب كتابك اللي ناقص'),
+        tile('#/complaints', 'complaint', 'المشاكل اللي شايفها في المدرسة'))),
+  ]);
+}
+
+/* ---------- Competitions ---------- */
+async function renderCompetitions() {
+  const list = h('div', { class: 'stack' }, loading());
+  show(pageShell('مسابقات المكتبة', 'تعرّف على المسابقات وشروطها ومواعيدها وطريقة المشاركة', list));
+  try {
+    const { items } = await api('GET', '/api/competitions');
+    if (!items.length) {
+      list.replaceChildren(h('div', { class: 'empty' }, h('span', { class: 'big' }, '🏆'), 'لا توجد مسابقات معلنة حالياً. تابعنا قريباً.'));
+      return;
+    }
+    list.replaceChildren(...items.map((c) =>
+      h('article', { class: 'card' },
+        h('h2', {}, c.title),
+        c.description && h('p', { class: 'desc' }, c.description),
+        h('div', { class: 'facts' },
+          fact('شروط الاشتراك', c.conditions),
+          fact('موعد المسابقة', [fmtDate(c.event_date), c.event_note].filter(Boolean).join(' — ')),
+          fact('طريقة المشاركة', c.how_to_join)))));
+  } catch (e) {
+    list.replaceChildren(errorBox(e.message));
+  }
+}
+
+/* ---------- Required books ---------- */
+async function renderBooks() {
+  const list = h('div', { class: 'stack' }, loading());
+  const input = h('input', { type: 'search', placeholder: 'ابحث عن كتاب بالاسم أو المؤلف…', 'aria-label': 'بحث عن كتاب', autocomplete: 'off', maxlength: 100 });
+  show(pageShell('الكتب', 'الكتب التي تطلب إدارة المكتبة من الطلاب قراءتها أو توفيرها',
+    h('div', { class: 'search' }, input), list));
+
+  let seq = 0;
+  async function load() {
+    const mine = ++seq;
+    try {
+      const { items } = await api('GET', '/api/books?q=' + encodeURIComponent(input.value.trim()));
+      if (mine !== seq) return;
+      if (!items.length) {
+        list.replaceChildren(h('div', { class: 'empty' }, h('span', { class: 'big' }, '📖'),
+          input.value.trim() ? 'لم يتم العثور على كتاب بهذا الاسم.' : 'لا توجد كتب مطلوبة حالياً.'));
+        return;
+      }
+      list.replaceChildren(...items.map((b) =>
+        h('article', { class: 'card' },
+          h('div', { class: 'book-top' },
+            h('div', {}, h('h2', {}, b.title), b.author && h('p', { class: 'author' }, 'تأليف: ' + b.author)),
+            h('span', { class: `badge ${b.status}` }, BOOK_STATUS[b.status] || b.status)),
+          b.description && h('p', { class: 'desc' }, b.description))));
+    } catch (e) {
+      if (mine === seq) list.replaceChildren(errorBox(e.message));
+    }
+  }
+  input.addEventListener('input', debounce(load, 250));
+  load();
+}
+
+/* ---------- Request form ---------- */
+function renderRequest() {
+  if (!settings.requests_open) {
+    show(pageShell('اطلب كتابك اللي ناقص', '', h('div', { class: 'empty' }, h('span', { class: 'big' }, '⏸️'), 'استقبال الطلبات متوقف مؤقتاً. حاول لاحقاً.')));
+    return;
+  }
+  const err = h('p', { class: 'err', role: 'alert' });
+  const submit = h('button', { class: 'btn gold', type: 'submit' }, 'إرسال الطلب');
+  const f = {
+    name: h('input', { id: 'f-name', name: 'student_name', required: true, maxlength: 80, autocomplete: 'name' }),
+    klass: h('input', { id: 'f-class', name: 'class_name', required: true, maxlength: 60, placeholder: 'مثال: الصف الأول الثانوي / 1-3' }),
+    book: h('input', { id: 'f-book', name: 'book_title', required: true, maxlength: 150 }),
+    notes: h('textarea', { id: 'f-notes', name: 'notes', maxlength: 500 }),
+    hp: h('input', { name: 'website', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }),
+  };
+  const form = h('form', { class: 'card form', novalidate: true },
+    h('div', {}, h('label', { for: 'f-name' }, 'اسم الطالب'), f.name),
+    h('div', {}, h('label', { for: 'f-class' }, 'الفصل الدراسي'), f.klass),
+    h('div', {}, h('label', { for: 'f-book' }, 'اسم الكتاب الذي تحتاجه'), f.book),
+    h('div', {}, h('label', { for: 'f-notes' }, 'ملاحظات إضافية ', h('small', {}, '(اختياري)')), f.notes),
+    h('div', { class: 'hp', 'aria-hidden': 'true' }, h('label', {}, 'اترك هذا الحقل فارغاً'), f.hp),
+    err, submit);
+
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    err.textContent = '';
+    const body = {
+      student_name: f.name.value, class_name: f.klass.value, book_title: f.book.value,
+      notes: f.notes.value, website: f.hp.value,
+    };
+    if (!body.student_name.trim() || !body.class_name.trim() || !body.book_title.trim()) {
+      err.textContent = 'الرجاء تعبئة الاسم والفصل واسم الكتاب';
+      return;
+    }
+    submit.disabled = true;
+    try {
+      await api('POST', '/api/requests', body);
+      show(pageShell('تم استلام طلبك', '',
+        h('div', { class: 'card success' },
+          h('div', { class: 'check', svg: ICONS.check }),
+          h('h2', {}, 'تم إرسال طلبك بنجاح'),
+          h('p', {}, `شكراً ${body.student_name.trim()}، سيطّلع أمين المكتبة على طلبك للكتاب «${body.book_title.trim()}».`),
+          h('div', { class: 'row' },
+            h('a', { class: 'btn', href: '#/' }, 'العودة للرئيسية'),
+            h('a', { class: 'btn ghost', href: '#/request', onclick: () => setTimeout(route) }, 'طلب كتاب آخر')))));
+    } catch (e) {
+      err.textContent = e.message;
+      submit.disabled = false;
+    }
+  });
+  show(pageShell('اطلب كتابك اللي ناقص', 'اكتب اسم الكتاب الذي تحتاجه وسيصل طلبك إلى أمين المكتبة', form));
+}
+
+/* ---------- Account (sign up / login / profile) ---------- */
+const NAME_RE = /^[\p{L}\p{M} '’-]{2,30}$/u;
+const USERNAME_RE = /^[\p{L}\p{N}_.-]{3,30}$/u;
+
+function setUser(u, csrf) {
+  user = u;
+  setCsrf(u ? csrf : '');
+}
+
+function labeled(id, label, input, hint) {
+  return h('div', {}, h('label', { for: id }, label), input, hint && h('p', { class: 'hint' }, hint));
+}
+
+function validateSignup(v) {
+  if (!NAME_RE.test(v.first_name.trim())) return 'الاسم الأول: حروف فقط (من 2 إلى 30 حرفاً)';
+  if (!NAME_RE.test(v.second_name.trim())) return 'الاسم الثاني: حروف فقط (من 2 إلى 30 حرفاً)';
+  if (!NAME_RE.test(v.third_name.trim())) return 'الاسم الثالث: حروف فقط (من 2 إلى 30 حرفاً)';
+  if (v.password.length < 8) return 'كلمة المرور يجب ألا تقل عن 8 أحرف';
+  if (v.password !== v.confirm_password) return 'تأكيد كلمة المرور غير مطابق';
+  return '';
+}
+
+function signupForm() {
+  const err = h('p', { class: 'err', role: 'alert' });
+  const submit = h('button', { class: 'btn gold', type: 'submit' }, 'إنشاء الحساب');
+  const f = {
+    first_name: h('input', { id: 'su-first', required: true, maxlength: 30, autocomplete: 'given-name' }),
+    second_name: h('input', { id: 'su-second', required: true, maxlength: 30, autocomplete: 'additional-name' }),
+    third_name: h('input', { id: 'su-third', required: true, maxlength: 30, autocomplete: 'family-name' }),
+    password: h('input', { id: 'su-pass', type: 'password', required: true, maxlength: 128, autocomplete: 'new-password' }),
+    confirm_password: h('input', { id: 'su-pass2', type: 'password', required: true, maxlength: 128, autocomplete: 'new-password' }),
+  };
+  const form = h('form', { class: 'card form', novalidate: true },
+    h('div', { class: 'row2' }, labeled('su-first', 'الاسم الأول', f.first_name), labeled('su-second', 'الاسم الثاني', f.second_name)),
+    labeled('su-third', 'الاسم الثالث', f.third_name),
+    labeled('su-pass', 'كلمة المرور', f.password, '8 أحرف على الأقل'),
+    labeled('su-pass2', 'تأكيد كلمة المرور', f.confirm_password),
+    err, submit);
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    err.textContent = '';
+    const body = Object.fromEntries(Object.entries(f).map(([k, el]) => [k, el.value]));
+    const problem = validateSignup(body);
+    if (problem) { err.textContent = problem; return; }
+    submit.disabled = true;
+    try {
+      // اسم المستخدم بيتولّد تلقائياً (الاسم الأول + أرقام) والخادم بيطلبه
+      const base = body.first_name.trim().replace(/[^\p{L}\p{N}]/gu, '').slice(0, 20) || 'user';
+      let r;
+      for (let i = 0; i < 5; i++) {
+        body.username = base + String(Math.floor(1000 + Math.random() * 9000));
+        try { r = await api('POST', '/api/signup', body); break; }
+        catch (e) { if (i === 4 || !/مستخدم|مسجل|موجود|taken|exist/i.test(e.message)) throw e; }
+      }
+      setUser(r.user, r.csrf);
+      toast('تم إنشاء حسابك بنجاح، أهلاً بك ' + r.user.first_name);
+      renderAccount();
+    } catch (e) {
+      err.textContent = e.message;
+      submit.disabled = false;
+    }
+  });
+  return form;
+}
+
+function loginForm() {
+  const err = h('p', { class: 'err', role: 'alert' });
+  const submit = h('button', { class: 'btn', type: 'submit' }, 'تسجيل الدخول');
+  const username = h('input', { id: 'li-user', required: true, maxlength: 64, autocomplete: 'username', autocapitalize: 'none', dir: 'ltr' });
+  const password = h('input', { id: 'li-pass', type: 'password', required: true, maxlength: 256, autocomplete: 'current-password' });
+  const form = h('form', { class: 'card form', novalidate: true },
+    labeled('li-user', 'اسم المستخدم', username),
+    labeled('li-pass', 'كلمة المرور', password),
+    err, submit);
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    err.textContent = '';
+    if (!username.value.trim() || !password.value) { err.textContent = 'الرجاء إدخال اسم المستخدم وكلمة المرور'; return; }
+    submit.disabled = true;
+    try {
+      const r = await api('POST', '/api/login', { username: username.value, password: password.value });
+      if (r.user.role === 'admin') {   // the server decides the role; admins go to their dashboard
+        location.href = '?admin';
+        return;
+      }
+      setUser(r.user, r.csrf);
+      toast('أهلاً بعودتك ' + r.user.first_name);
+      renderAccount();
+    } catch (e) {
+      err.textContent = e.message;
+      password.value = '';
+      submit.disabled = false;
+    }
+  });
+  return form;
+}
+
+function profileCard() {
+  const logoutBtn = h('button', { class: 'btn ghost', type: 'button' }, 'تسجيل الخروج');
+  logoutBtn.addEventListener('click', async () => {
+    logoutBtn.disabled = true;
+    try { await api('POST', '/api/logout', {}); } catch { /* session may already be gone */ }
+    setUser(null);
+    toast('تم تسجيل الخروج');
+    renderAccount();
+  });
+  return h('div', { class: 'card profile' },
+    h('div', { class: 'avatar', 'aria-hidden': 'true' }, [...user.first_name][0]),
+    h('h2', {}, user.full_name),
+    h('p', { class: 'author' }, '@' + user.username),
+    h('span', { class: `badge ${user.role === 'admin' ? 'required' : 'available'}` }, user.role === 'admin' ? 'حساب إدارة' : 'حساب طالب'),
+    h('div', { class: 'actions-col' },
+      user.role === 'admin' && h('a', { class: 'btn gold', href: '?admin' }, 'فتح لوحة الإدارة'),
+      logoutBtn));
+}
+
+function renderAccount() {
+  if (user) {
+    show(pageShell('حسابك', 'أنت مسجّل الدخول', profileCard()));
+    return;
+  }
+  const holder = h('div');
+  const tabs = h('div', { class: 'seg', role: 'tablist' });
+  const draw = () => {
+    tabs.replaceChildren(...[['signup', 'إنشاء حساب'], ['login', 'تسجيل دخول']].map(([id, label]) =>
+      h('button', {
+        type: 'button', role: 'tab', 'aria-selected': String(accountTab === id),
+        onclick: () => { accountTab = id; draw(); },
+      }, label)));
+    holder.replaceChildren(accountTab === 'signup' ? signupForm() : loginForm());
+  };
+  draw();
+  show(pageShell('حسابك', 'أنشئ حساباً جديداً أو سجّل دخولك', tabs, holder));
+}
+
+/* ---------- Anonymous complaints box ---------- */
+function renderComplaints() {
+  const err = h('p', { class: 'err', role: 'alert' });
+  const submit = h('button', { class: 'btn gold', type: 'submit' }, 'إرسال الرسالة');
+  const msg = h('textarea', { id: 'c-msg', rows: 6, maxlength: 1500, required: true, placeholder: 'اكتب هنا ما يضايقك أو ما تتمنى أن يتحسّن…' });
+  const counter = h('small', { class: 'counter' }, '0 / 1500');
+  const hp = h('input', { name: 'website', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' });
+  msg.addEventListener('input', () => { counter.textContent = `${msg.value.length} / 1500`; });
+  const form = h('form', { class: 'card form', novalidate: true },
+    h('div', {}, h('div', { class: 'label-row' }, h('label', { for: 'c-msg' }, 'المشاكل اللي شايفها في المدرسة؟'), counter), msg),
+    h('div', { class: 'hp', 'aria-hidden': 'true' }, h('label', {}, 'اترك هذا الحقل فارغاً'), hp),
+    err, submit);
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    err.textContent = '';
+    if (msg.value.trim().length < 5) { err.textContent = 'اكتب رسالة لا تقل عن 5 أحرف'; return; }
+    submit.disabled = true;
+    try {
+      await api('POST', '/api/complaints', { message: msg.value, website: hp.value });
+      show(pageShell('وصلت رسالتك', '',
+        h('div', { class: 'card success' },
+          h('div', { class: 'check', svg: ICONS.check }),
+          h('h2', {}, 'شكراً لصراحتك'),
+          h('p', {}, 'وصلت رسالتك إلى الإدارة بدون اسمك أو أي معلومة عنك.'),
+          h('div', { class: 'row' },
+            h('a', { class: 'btn', href: '#/' }, 'العودة للرئيسية'),
+            h('a', { class: 'btn ghost', href: '#/complaints', onclick: () => setTimeout(route) }, 'إرسال رسالة أخرى')))));
+    } catch (e) {
+      err.textContent = e.message;
+      submit.disabled = false;
+    }
+  });
+  show(pageShell('المشاكل اللي شايفها في المدرسة', 'قل لنا بصراحة ما يضايقك لنعمل على تحسينه',
+    h('div', { class: 'privacy', role: 'note' },
+      h('span', { class: 'lock', 'aria-hidden': 'true' }, '🔒'),
+      h('p', {}, 'رسالتك مجهولة تماماً: لا نطلب اسمك ولا نحفظ حسابك أو أي معلومة تدل عليك، ولن تظهر هويتك للإدارة. وإن أردت إخفاء هويتك فلا تكتب اسمك داخل الرسالة.')),
+    form));
+}
+
+/* ---------- Router ---------- */
+const ROUTES = {
+  '': renderHome, '/': renderHome,
+  '/competitions': renderCompetitions, '/books': renderBooks, '/request': renderRequest,
+  '/complaints': renderComplaints, '/account': renderAccount,
+};
+const TITLES = {
+  '/competitions': 'مسابقات المكتبة', '/books': 'الكتب', '/request': 'اطلب كتابك اللي ناقص',
+  '/complaints': 'المشاكل اللي شايفها في المدرسة', '/account': 'حسابك',
+};
+
+function markNav(path) {
+  document.querySelectorAll('[data-nav]').forEach((a) => {
+    const on = (a.dataset.nav === 'account') === (path === '/account');
+    a.classList.toggle('active', on);
+    if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+}
+
+function route(forced) {
+  const path = typeof forced === 'string' ? forced : location.hash.replace(/^#/, '');
+  (ROUTES[path] || renderHome)();
+  document.title = TITLES[path] ? `${TITLES[path]} — مكتبة مدرستنا` : 'مكتبة مدرستنا';
+  markNav(ROUTES[path] ? path : '/');
+}
+
+document.addEventListener('click', (e) => {
+  const a = e.target.closest && e.target.closest('a[href^="#/"]');
+  if (!a) return;
+  e.preventDefault();
+  const p = a.getAttribute('href').slice(1);
+  try { history.replaceState(null, '', '#' + p); } catch { /* sandboxed */ }
+  route(p);
+});
+window.addEventListener('hashchange', () => route());
+route();
+
+async function start() {
+  try {
+    settings = { ...settings, ...(await api('GET', '/api/settings')) };
+  } catch { /* fall back to defaults */ }
+  try {
+    const me = await api('GET', '/api/me');   // keeps the session across page refreshes
+    if (me.user) setUser(me.user, me.csrf);
+  } catch { /* stay signed out */ }
+  if (settings.footer_text) document.getElementById('footer-text').textContent = settings.footer_text;
+  route();
+}
+start();
+
+})();
+
+}
+</script>
+</body>
+</html>
